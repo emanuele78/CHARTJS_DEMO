@@ -38,176 +38,6 @@ $(function () {
     });
     //listener per tasti premuti nella input
     attachListenerForOnlyNumbersToInputText($("#value"));
-    // TODO da cancellare
-    // new Chart($(".monthly_sales_per_sellers"), {
-    //     type: 'bar',
-    //     data: {
-    //         labels: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
-    //         datasets: [
-    //             {
-    //                 //MARCO
-    //                 label: 'marco',
-    //                 data: [0, 9750, 0, 1250, 0, 3250, 2250, 0, 3450, 1150, 4550, 1550],
-    //                 backgroundColor: [
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                     "rgba(167, 148, 130, 0.3)",
-    //                 ],
-    //                 borderColor: [
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)'
-    //                 ],
-    //                 borderWidth: 1
-    //             }, {
-    //                 //GIUSEPPE
-    //                 label: 'giuseppe',
-    //                 data: [750, 2480, 2580, 1000, 5800, 0, 0, 5600, 0, 4800, 0, 4900],
-    //                 backgroundColor: [
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)',
-    //                     'rgba(147, 89, 64, 0.2)'
-    //                 ],
-    //                 borderColor: [
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)'
-    //                 ],
-    //                 borderWidth: 1
-    //             }, {
-    //                 //RICCARDO
-    //                 label: 'riccardo',
-    //                 data: [3200, 2300, 4200, 4000, 1300, 1340, 4350, 0, 4350, 8250, 0, 2010],
-    //                 backgroundColor: [
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)',
-    //                     'rgba(155, 159, 64, 0.2)'
-    //                 ],
-    //                 borderColor: [
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)'
-    //                 ],
-    //                 borderWidth: 1
-    //             }, {
-    //                 //ROBERTO
-    //                 label: 'roberto',
-    //                 data: [2010, 3010, 7010, 1350, 7850, 2850, 0, 0, 550, 1550, 6550, 0],
-    //                 backgroundColor: [
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)',
-    //                     'rgba(255, 159, 64, 0.2)'
-    //                 ],
-    //                 borderColor: [
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)',
-    //                     'rgba(0, 0, 0, 1)'
-    //                 ],
-    //                 borderWidth: 1
-    //             }]
-    //     },
-    //     options: {
-    //         responsive: true,
-    //         maintainAspectRatio: false,
-    //         title: {
-    //             display: true,
-    //             position: "top",
-    //             text: "Vendite mensili per venditore"
-    //         },
-    //         legend: {
-    //             display: true,
-    //             position: "bottom"
-    //         },
-    //         scales: {
-    //             yAxes: [{
-    //                 stacked: true,
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }],
-    //             xAxes: [{
-    //                 stacked: true,
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-
 });
 
 //funzione che collega un listener nella input text passata per abilitare la pressione di soli numeri, 1 punto e tasti cancella
@@ -272,7 +102,7 @@ function printData(rawData) {
 function attachChangeColorsButtonListener() {
     let outerThis = this;
     $(".button_change_colors").click(function () {
-        changeColors(outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart);
+        changeColors(outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart, outerThis.montlySalesPerSellerChart);
     });
 }
 
@@ -314,14 +144,15 @@ function updateDataset() {
         let sellersData = getDataForSellersSales(rawData);
         let quartersData = getDataForQuarters(rawData);
         let monthlySalesPerSellerData = getDataForMonthlySalesPerSeller(rawData);
+        //riassegno solo i valori mantenendo i colori vecchi in modo da avere un aggiornamento grafico piacevole
         outerThis.monthlyChart.data.datasets[0].data = monthlyData.data;
         outerThis.sellersChart.data.datasets[0].data = sellersData.data;
         outerThis.quartersChart.data.datasets[0].data = quartersData.data;
         outerThis.montlySalesPerSellerChart.data.datasets.forEach(chartItem => {
             monthlySalesPerSellerData.forEach(newDatasetItem => {
-               if(chartItem.label === newDatasetItem.label){
-                   chartItem.data = newDatasetItem.data;
-               }
+                if (chartItem.label === newDatasetItem.label) {
+                    chartItem.data = newDatasetItem.data;
+                }
             });
         });
         outerThis.monthlyChart.update();
@@ -336,9 +167,21 @@ function changeColors(...charts) {
     //per ogni grafico passato cambio il colore
     charts.forEach(chart => {
         if (chart.config.type === "line") {
+            //grafico a linea
             chart.data.datasets[0].borderColor = getRandomArrayColors(1, false)[0];
-        } else {
+        } else if (chart.data.datasets.length === 1) {
+            //grafico a barre o a torta
             chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length, true);
+        } else {
+            //grafico a barre sovrapposte
+            let sellerColors = getRandomArrayColors(chart.data.datasets.length, true);
+            //ciclo sugli elementi venditore nell'array per impostare il colore del bordo - per tutti uguale
+            //e il colore di sfondo ovvero il colore venditore
+            for (let cont = 0; cont < chart.data.datasets.length; cont++) {
+                chart.data.datasets[cont].borderWidth = 1;
+                chart.data.datasets[cont].borderColor = new Array(chart.data.labels.length).fill("rgba(0, 0, 0, 1)");
+                chart.data.datasets[cont].backgroundColor = new Array(chart.data.labels.length).fill(sellerColors[cont]);
+            }
         }
         chart.update();
     });
@@ -384,7 +227,6 @@ function createChart(context, chartType, options, data) {
         case "stacked_bar":
             chartType = "bar";
             dataset = data;
-            console.log(dataset);
             //ogni venditore deve avere un colore e questo colore deve essere ripetutto tante volte quanti sono i valore in x
             let sellerColors = getRandomArrayColors(dataset.length, true);
             //ciclo sugli elementi venditore nell'array per impostare il colore del bordo - per tutti uguale
