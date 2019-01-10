@@ -40,6 +40,7 @@ function attachListenerForOnlyNumbersToInputText(inputText) {
     inputText.keypress(function (event) {
         //ammessi solo numeri, punto, cancella
         switch (event.keyCode) {
+            //tasti ammessi
             case 48:
             case 49:
             case 50:
@@ -57,6 +58,10 @@ function attachListenerForOnlyNumbersToInputText(inputText) {
                 if (inputText.val().includes(".")) {
                     event.preventDefault();
                 }
+                break;
+            case 13:
+                //tasto invio
+                $(".button_add").trigger("click");
                 break;
             default:
                 event.preventDefault();
