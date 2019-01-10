@@ -6,6 +6,7 @@
 }
 
 .main_wrapper {
+	position: relative;
 	width: 100vw;
 	height: 100vh;
 }
@@ -85,5 +86,19 @@
 	font-weight: 400;
 }
 
+.error_message {
+	display: none;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	font-size: 20px;
+	font-weight: 400;
+	padding: 40px 80px;
+	transform: translate(-50%, -50%);
+	border-radius: 8px;
+	background-color: lightgray;
+	box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.24);
+
+}
 
 

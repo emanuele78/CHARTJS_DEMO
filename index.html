@@ -34,7 +34,7 @@
 						<option value="12">Dicembre</option>
 					</select>
 					<label class="label" for="value">Importo vendita</label>
-					<input id="value" type="text" class="value--standard">
+					<input class="value--standard" id="value" type="text">
 					<button class="button button_add">Aggiungi</button>
 				</div>
 				<div class="data_input_right">
@@ -55,6 +55,7 @@
 					<canvas class="quarters_sales"></canvas>
 				</div>
 			</div>
+			<div class="error_message">Errore server</div>
 			<script id="select_template" type="text/x-handlebars-template">
 				{{#each list}}
 				<option value="{{this}}">{{this}}</option>

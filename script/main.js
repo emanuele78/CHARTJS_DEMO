@@ -35,7 +35,7 @@ $(function () {
     let outerThis = this;
     this.ajaxCall.doCall(this.ajaxCall.getBaseUri(), this.ajaxCall.methodGet(), rawData => {
         printData.call(outerThis, rawData);
-    });
+    }, showError);
     //listener per tasti premuti nella input
     attachListenerForOnlyNumbersToInputText($("#value"));
 });
@@ -132,7 +132,7 @@ function attachAddValueButtonListener() {
         //chiamata
         outerThis.ajaxCall.doCall(outerThis.ajaxCall.getBaseUri(), outerThis.ajaxCall.methodPost(), () => {
             updateDataset.call(outerThis);
-        }, null, postData);
+        }, showError, postData);
     });
 }
 
@@ -159,7 +159,7 @@ function updateDataset() {
         outerThis.sellersChart.update();
         outerThis.quartersChart.update();
         outerThis.montlySalesPerSellerChart.update();
-    });
+    }, showError);
 }
 
 //funzione che cambia i colori usati nei grafici
@@ -360,6 +360,15 @@ function AjaxCall() {
     this.getBaseUri = () => BASE_URI;
     this.methodGet = () => METHOD_GET;
     this.methodPost = () => METHOD_POST;
+}
+
+// funzione che mostra l'errore del server
+function showError() {
+    let errorElement = $(".error_message");
+    errorElement.show();
+    setTimeout(() => {
+        errorElement.hide();
+    }, 1500);
 }
 
 // funzione che ritorna un oggetto contenente le etichette e i valori da impostare nel grafico del fatturato mensile
