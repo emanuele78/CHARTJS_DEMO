@@ -39,49 +39,167 @@ $(function () {
     //listener per tasti premuti nella input
     attachListenerForOnlyNumbersToInputText($("#value"));
     // TODO da cancellare
-    // var ctx = $(".monthly_sales_per_sellers");
-    // var myChart = new Chart(ctx, {
+    // new Chart($(".monthly_sales_per_sellers"), {
     //     type: 'bar',
     //     data: {
-    //         labels: ["gennaio", "febbraio", "marzo", "aprile"],
-    //         datasets: [{
-    //             label: 'mario',
-    //             data: [12, 19, 3, 5],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.3)',
-    //                 'rgba(54, 162, 235, 0.3)',
-    //                 'rgba(255, 206, 86, 0.3)',
-    //                 'rgba(75, 192, 192, 0.3)'
-    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
-    //             ]
-    //         }, {
-    //             label: 'franco',
-    //             data: [19, 3, 31, 15],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.3)',
-    //                 'rgba(54, 162, 235, 0.3)',
-    //                 'rgba(255, 206, 86, 0.3)',
-    //                 'rgba(75, 192, 192, 0.3)'
-    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
-    //             ]
-    //         }, {
-    //             label: 'miriam',
-    //             data: [7, 13, 4, 9],
-    //             backgroundColor: [
-    //                 'rgba(255, 99, 132, 0.3)',
-    //                 'rgba(54, 162, 235, 0.3)',
-    //                 'rgba(255, 206, 86, 0.3)',
-    //                 'rgba(75, 192, 192, 0.3)'
-    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
-    //             ]
-    //         }]
+    //         labels: ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"],
+    //         datasets: [
+    //             {
+    //                 //MARCO
+    //                 label: 'marco',
+    //                 data: [0, 9750, 0, 1250, 0, 3250, 2250, 0, 3450, 1150, 4550, 1550],
+    //                 backgroundColor: [
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                     "rgba(167, 148, 130, 0.3)",
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }, {
+    //                 //GIUSEPPE
+    //                 label: 'giuseppe',
+    //                 data: [750, 2480, 2580, 1000, 5800, 0, 0, 5600, 0, 4800, 0, 4900],
+    //                 backgroundColor: [
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)',
+    //                     'rgba(147, 89, 64, 0.2)'
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }, {
+    //                 //RICCARDO
+    //                 label: 'riccardo',
+    //                 data: [3200, 2300, 4200, 4000, 1300, 1340, 4350, 0, 4350, 8250, 0, 2010],
+    //                 backgroundColor: [
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)',
+    //                     'rgba(155, 159, 64, 0.2)'
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }, {
+    //                 //ROBERTO
+    //                 label: 'roberto',
+    //                 data: [2010, 3010, 7010, 1350, 7850, 2850, 0, 0, 550, 1550, 6550, 0],
+    //                 backgroundColor: [
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)',
+    //                     'rgba(255, 159, 64, 0.2)'
+    //                 ],
+    //                 borderColor: [
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)',
+    //                     'rgba(0, 0, 0, 1)'
+    //                 ],
+    //                 borderWidth: 1
+    //             }]
     //     },
     //     options: {
+    //         responsive: true,
+    //         maintainAspectRatio: false,
+    //         title: {
+    //             display: true,
+    //             position: "top",
+    //             text: "Vendite mensili per venditore"
+    //         },
+    //         legend: {
+    //             display: true,
+    //             position: "bottom"
+    //         },
     //         scales: {
-    //             xAxes: [{
-    //                 stacked: true
-    //             }],
     //             yAxes: [{
+    //                 stacked: true,
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }],
+    //             xAxes: [{
+    //                 stacked: true,
     //                 ticks: {
     //                     beginAtZero: true
     //                 }
@@ -249,7 +367,7 @@ function createChart(context, chartType, options, data) {
         case "bar":
         case "doughnut":
             //nel caso di bar e pie specifico i colori di background che saranno tanti quanti i dati da visualizzare
-            colors = getRandomArrayColors(data.data.length,false);
+            colors = getRandomArrayColors(data.data.length, false);
             dataset.backgroundColor = colors;
             dataset.data = data.data;
             dataset = [dataset];
@@ -278,9 +396,9 @@ function getRandomArrayColors(colorsCount, useAlpha) {
     while (colors.length < colorsCount) {
         let randomColor = "";
         if (useAlpha) {
-            randomColor = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.3 + ')';
+            randomColor = 'rgba(' + o(r() * s) + ', ' + o(r() * s) + ', ' + o(r() * s) + ', ' + 0.3 + ')';
         } else {
-            randomColor = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 1 + ')';
+            randomColor = 'rgba(' + o(r() * s) + ', ' + o(r() * s) + ', ' + o(r() * s) + ', ' + 1 + ')';
         }
         if (colors.length === 0 || !colors.includes(randomColor)) {
             colors.push(randomColor);
@@ -288,16 +406,6 @@ function getRandomArrayColors(colorsCount, useAlpha) {
     }
     return colors;
 }
-// function getRandomArrayColors(colorsCount) {
-//     let colors = [];
-//     while (colors.length < colorsCount) {
-//         let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-//         if ((colors.length === 0 || !colors.includes(randomColor)) && randomColor.length === 7) {
-//             colors.push(randomColor);
-//         }
-//     }
-//     return colors;
-// }
 
 //funzione che ritorna un oggetto di configurazione per il grafico (proprietà options)
 function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero, useStack) {
@@ -341,13 +449,17 @@ function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero, 
     if (useStack) {
         configOptions.scales = {
             yAxes: [{
+                stacked: true,
                 ticks: {
                     beginAtZero: true
                 }
             }],
             xAxes: [{
-                stacked: true
-            }],
+                stacked: true,
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
         };
     }
     return configOptions;
@@ -463,11 +575,11 @@ function getDataForMonthlySalesPerSeller(rawData) {
     const MONTHS_NAMES = [];
     const MONTHS_IN_A_YEAR = 12;
     for (let cont = 1; cont <= MONTHS_IN_A_YEAR; cont++) {
-        MONTHS_NAMES.push(moment(cont, "M").format("MMMM"));
+        MONTHS_NAMES.push(moment(cont, "M").format("MMMM").capitalizeFirst());
     }
     //proprietà dell'array che contiene un array con il nome dei mesi
     dataset.labels = MONTHS_NAMES;
-    let colors = getRandomArrayColors(MONTHS_IN_A_YEAR, true);
+    let usedColors = [];
     //ciclo sugli elementi
     rawData.forEach(item => {
         //verifico se il venditore è già nel dataset
@@ -479,16 +591,35 @@ function getDataForMonthlySalesPerSeller(rawData) {
         }
         if (sellerIndex === -1) {
             //il venditore non esiste, lo aggiungo come oggetto nel dataset
-            dataset.push({
+            let newSeller = {
                 label: item.salesman.capitalizeFirst(),
                 data: new Array(MONTHS_IN_A_YEAR).fill(0),
-                backgroundColor: colors
-            });
-        } else {
-            // il venditore esiste già nel dataset
-            const MONTH_INDEX = parseInt(moment(item.date, "DD/MM/YYYY").format("M")) - 1;
-            dataset[sellerIndex].data[MONTH_INDEX] += parseFloat(item.amount);
+                backgroundColor: [],
+                borderWidth: 1,
+                borderColor: []
+            };
+            //acquisisco colore random per il nuovo venditore
+            let newSellerColor;
+            let generateAgain = true;
+            // genero un nuovo colore finché non ne viene trovato uno che non è già stato usato
+            while (generateAgain) {
+                newSellerColor = getRandomArrayColors(1, true);
+                if (!usedColors.includes(newSellerColor[0])) {
+                    generateAgain = false;
+                    usedColors.push(newSellerColor[0]);
+                }
+            }
+            //il colore così generato appartiene all'utente e deve essere inserito 12 volte (= numero mesi)
+            for (let cont = 0; cont < MONTHS_IN_A_YEAR; cont++) {
+                newSeller.backgroundColor.push(newSellerColor[0]);
+                newSeller.borderColor.push("rgba(0, 0, 0, 1)");
+            }
+            dataset.push(newSeller);
+            //l'indice dell'elemento inserito sarà uguale alla lunghezza dell'array-1
+            sellerIndex = dataset.length - 1;
         }
+        const MONTH_INDEX = parseInt(moment(item.date, "DD/MM/YYYY").format("M")) - 1;
+        dataset[sellerIndex].data[MONTH_INDEX] += parseFloat(item.amount);
     });
     return dataset;
 }
