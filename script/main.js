@@ -302,8 +302,8 @@ function getDataForMonthlySales(rawData) {
     };
     rawData.forEach((item) => {
         //1-base
-        const MONTH_INDEX = parseInt(moment(item.date, "DD-MM-YYYY").format("M"));
-        dataset.labels[MONTH_INDEX - 1] = moment(item.date, "DD-MM-YYYY").format("MMMM").capitalizeFirst();
+        const MONTH_INDEX = parseInt(moment(item.date, "DD/MM/YYYY").format("M"));
+        dataset.labels[MONTH_INDEX - 1] = moment(item.date, "DD/MM/YYYY").format("MMMM").capitalizeFirst();
         if (dataset.data[MONTH_INDEX - 1] === undefined) {
             dataset.data[MONTH_INDEX - 1] = 0;
         }
@@ -342,7 +342,7 @@ function getDataForQuarters(rawData) {
     };
     rawData.forEach((item) => {
         const MONTH_IN_A_QUARTER = 3;
-        let itemMonth = parseInt(moment(item.date, "DD-MM-YYYY").format("M"));
+        let itemMonth = parseInt(moment(item.date, "DD/MM/YYYY").format("M"));
         //0-base
         const QUARTER_INDEX = Math.floor((--itemMonth + MONTH_IN_A_QUARTER) / 3) - 1;
         if (dataset.data[QUARTER_INDEX] === undefined) {
