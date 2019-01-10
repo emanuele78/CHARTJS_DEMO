@@ -313,12 +313,15 @@ function updateDataset() {
         let monthlyData = getDataForMonthlySales(rawData);
         let sellersData = getDataForSellersSales(rawData);
         let quartersData = getDataForQuarters(rawData);
+        let monthlySalesPerSellerData = getDataForMonthlySalesPerSeller(rawData);
         outerThis.monthlyChart.data.datasets[0].data = monthlyData.data;
         outerThis.sellersChart.data.datasets[0].data = sellersData.data;
         outerThis.quartersChart.data.datasets[0].data = quartersData.data;
+        outerThis.montlySalesPerSellerChart.data.datasets = monthlySalesPerSellerData;
         outerThis.monthlyChart.update();
         outerThis.sellersChart.update();
         outerThis.quartersChart.update();
+        outerThis.montlySalesPerSellerChart.update();
     });
 }
 
