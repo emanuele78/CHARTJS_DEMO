@@ -6,43 +6,140 @@ String.prototype.capitalizeFirst = function () {
 };
 
 $(function () {
-    //effettuo la chiamata Ajax
-    let ajaxCall = new AjaxCall();
-    ajaxCall.doCall(ajaxCall.getBaseUri(), ajaxCall.methodGet(), rawData => {
-        printData(rawData, ajaxCall)
+    //oggetto con letterali per maggiore leggibilità degli argomenti passati nelle funzioni
+    this.leterals = {
+        line_chart_type: "line",
+        doughnut_chart_type: "doughnut",
+        bar_chart_type: "bar",
+        hide_legend: false,
+        show_legend: true,
+        y_axis_begin_at_zero: true,
+        y_axis_standard: false,
+        tooltips_standard: false,
+        tooltips_percentage: true,
+        monthly_chart_title: "Fatturato mensile",
+        sellers_chart_title: "Fatturato per venditore",
+        quarters_chart_title: "Vendite per Quarter"
+    };
+    //context per le chart
+    this.monthly_sales_context = $(".monthly_sales");
+    this.seller_sales_context = $(".sellers_sales");
+    this.quarters_sales_context = $(".quarters_sales");
+    //oggetto che fa le chiamate Ajax
+    this.ajaxCall = new AjaxCall();
+    let outerThis = this;
+    this.ajaxCall.doCall(this.ajaxCall.getBaseUri(), this.ajaxCall.methodGet(), rawData => {
+        printData.call(outerThis, rawData);
     });
+    //listener per tasti premuti nella input
+    attachListenerForOnlyNumbersToInputText($("#value"));
 });
 
+//funzione che collega un listener nella input text passata per abilitare la pressione di soli numeri, 1 punto e tasti cancella
+function attachListenerForOnlyNumbersToInputText(inputText) {
+    inputText.keypress(function (event) {
+        //ammessi solo numeri, punto, cancella
+        switch (event.keyCode) {
+            case 48:
+            case 49:
+            case 50:
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+            case 56:
+            case 57:
+            case 8:
+                break;
+            case 46:
+                //1 solo punto ammesso
+                if (inputText.val().includes(".")) {
+                    event.preventDefault();
+                }
+                break;
+            default:
+                event.preventDefault();
+        }
+    });
+}
+
 function printData(rawData) {
-    const MONTHLY_SALES_CONTEXT = $(".monthly_sales");
-    const SELLER_SALES_CONTEXT = $(".sellers_sales");
-    const QUARTERS_SALES_CONTEXT = $(".quarters_sales");
-    const LINE_CHART_TYPE = "line";
-    const DOUGHNUT_CHART_TYPE = "doughnut";
-    const BAR_CHART_TYPE = "bar";
+    //elaboro i dati
     let monthlyData = getDataForMonthlySales(rawData);
     let sellersData = getDataForSellersSales(rawData);
     let quartersData = getDataForQuarters(rawData);
+    //aggiungo i venditori alla select
     addSellersToSelect(sellersData.labels);
-    let monthlyChartOptions = getChartOptions(false, "Fatturato mensile", false, false);
-    let sellersChartOptions = getChartOptions(true, "Fatturato per venditore", true, false);
-    let quartersChartOptions = getChartOptions(false, "Vendite per Quarter", false, true);
-    let monthlyChart = createChart(MONTHLY_SALES_CONTEXT, LINE_CHART_TYPE, monthlyChartOptions, monthlyData);
-    let sellersChart = createChart(SELLER_SALES_CONTEXT, DOUGHNUT_CHART_TYPE, sellersChartOptions, sellersData);
-    let quartersChart = createChart(QUARTERS_SALES_CONTEXT, BAR_CHART_TYPE, quartersChartOptions, quartersData);
-    setTimeout(function () {
-        monthlyChart.data.datasets[0].data = ["10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10"];
-        monthlyChart.update();
-    }, 2000);
-    //listener pulsanti
+    //creo l'oggetto options per i grafici
+    let monthlyChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.monthly_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_standard);
+    let sellersChartOptions = getChartOptions(this.leterals.show_legend, this.leterals.sellers_chart_title, this.leterals.tooltips_percentage, this.leterals.y_axis_standard);
+    let quartersChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.quarters_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_begin_at_zero);
+    //creo i grafici
+    this.monthlyChart = createChart(this.monthly_sales_context, this.leterals.line_chart_type, monthlyChartOptions, monthlyData);
+    this.sellersChart = createChart(this.seller_sales_context, this.leterals.doughnut_chart_type, sellersChartOptions, sellersData);
+    this.quartersChart = createChart(this.quarters_sales_context, this.leterals.bar_chart_type, quartersChartOptions, quartersData);
+    //listener pulsante per il cambio colore
+    attachChangeColorsButtonListener.call(this);
+    //listener pulsante aggiunta valori
+    attachAddValueButtonListener.call(this);
+}
+
+// funzione che collega listener su pulsante che cambia i colori e processa l'elaborazione
+function attachChangeColorsButtonListener() {
+    let outerThis = this;
     $(".button_change_colors").click(function () {
-        changeColors(monthlyChart, sellersChart, quartersChart);
+        changeColors(outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart);
+    });
+}
+
+// funzione che collega listener su pulsante che aggiunge i valori e processa l'elaborazione
+function attachAddValueButtonListener() {
+    let outerThis = this;
+    $(".button_add").click(function () {
+        let valueToAdd = parseFloat($("#value").val());
+        //controllo se il valore immesso è un numero
+        if (isNaN(valueToAdd)) {
+            //non è un numero - aggiungo bordo rosso
+            $("#value").removeClass("value--standard");
+            $("#value").addClass("value--error");
+            return;
+        }
+        //rimuovo eventuali bordi rossi precedenti
+        $("#value").removeClass("value--error");
+        $("#value").addClass("value--standard");
+        //preparo oggetto data
+        let postData = {
+            salesman: $("#sellers").val(),
+            amount: valueToAdd,
+            date: "1/" + $("#months").val() + "/2017"
+        };
+        //chiamata
+        outerThis.ajaxCall.doCall(outerThis.ajaxCall.getBaseUri(), outerThis.ajaxCall.methodPost(), () => {
+            updateDataset.call(outerThis);
+        }, null, postData);
+    });
+}
+
+function updateDataset() {
+    let outerThis=this;
+    this.ajaxCall.doCall(this.ajaxCall.getBaseUri(), this.ajaxCall.methodGet(), rawData => {
+        // elaboro i dati
+        let monthlyData = getDataForMonthlySales(rawData);
+        let sellersData = getDataForSellersSales(rawData);
+        let quartersData = getDataForQuarters(rawData);
+        outerThis.monthlyChart.data.datasets[0].data = monthlyData;
+        outerThis.sellersChart.data.datasets[0].data = sellersData;
+        outerThis.quartersChart.data.datasets[0].data = quartersData;
+        outerThis.monthlyChart.update();
+        outerThis.sellersChart.update();
+        outerThis.quartersChart.update();
     });
 }
 
 //funzione che cambia i colori usati nei grafici
 function changeColors(...charts) {
-    //per ogni
+    //per ogni grafico passato cambio il colore
     charts.forEach(chart => {
         if (chart.config.type === "line") {
             chart.data.datasets[0].borderColor = getRandomArrayColors(1)[0];
@@ -163,6 +260,7 @@ function AjaxCall() {
     const METHOD_GET = "GET";
     const METHOD_POST = "POST";
     this.doCall = function (url, method, successCallback, errorCallback, data) {
+        console.log(data);
         if (!pendingCall) {
             $.ajax(url, {
                 method: method,

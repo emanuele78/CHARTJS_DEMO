@@ -18,14 +18,14 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 50px;
+	height: 60px;
 	box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.24);
 }
 
 .charts_wrapper {
 	width: 100%;
 	height: 100%;
-	padding-top: 50px;
+	padding-top: 60px;
 }
 
 .chart_container {
@@ -47,21 +47,28 @@
 }
 
 #value {
-	padding: 0 5px;
+	padding: 5px 5px;
+}
+
+.value--error {
+	border: 1px solid red;
+}
+
+.value--standard {
 	border: 1px solid lightgray;
 }
 
 .button {
 	font-size: 13px;
 	font-weight: 300;
-	padding: 5px 10px;
+	padding: 10px 10px;
 	cursor: pointer;
 	text-transform: uppercase;
 	border: none;
-	background-color: lightblue;
+	background-color: lightgreen;
 }
 
-#sellers, #months, #value {
+#sellers, #months, #value, .button {
 	outline: none;
 }
 
@@ -71,6 +78,11 @@
 
 #sellers, #months {
 	width: 120px;
+}
+
+#months, #sellers, #value {
+	font-size: 14px;
+	font-weight: 400;
 }
 
 
