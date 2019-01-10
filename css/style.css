@@ -10,9 +10,9 @@
 }
 
 .chart_container {
-	float: left;
 	width: 50%;
 	height: 50%;
+	float: left;
 	padding: 20px;
 	border: 1px solid black;
 }

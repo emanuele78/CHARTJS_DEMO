@@ -1,60 +1,81 @@
 $(function () {
+    //impostazione locale per momentJS
     moment.locale('it');
+    //metodo prototype di utilità
     String.prototype.capitalizeFirst = function () {
         return this.charAt(0).toUpperCase() + this.substring(1);
     };
-    var monthlySalesContext = $(".monthly_sales");
-    var lineChartConfigOptions = getConfigOptions(true, "Fatturato mensile", false);
-    var lineChart = new Chart(monthlySalesContext, {
-        type: 'line',
-        data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
-            datasets: [{
-                label: "Fatturato mensile",
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45],
-                lineTension: 0,
-                fill: false
-            }]
-        },
-        options: lineChartConfigOptions
-    });
-
-    var sellersSalesContext = $(".sellers_sales");
-    var doughnutChartConfigOptions = getConfigOptions(true, "Fatturato per venditore", true);
-    var doughnutChart = new Chart(sellersSalesContext, {
-        type: 'doughnut',
-        data: {
-            labels: ["Mario", "Bruno", "Franco", "Silvia"],
-            datasets: [{
-                borderColor: 'rgb(255, 255, 255)',
-                backgroundColor: ['#36a2eb', '#ff6384'],
-                data: [0.12, 0.28, .2, .4]
-            }]
-        },
-        options: doughnutChartConfigOptions
-    });
-
-    var quartersSalesContext = $(".quarters_sales");
-    var barChartConfigOptions = getConfigOptions(false, "Vendite per Quarter", false);
-    var barChart = new Chart(quartersSalesContext, {
-        type: 'bar',
-        data: {
-            labels: ["Q1", "Q2", "Q3", "Q4"],
-            datasets: [{
-                borderColor: 'rgb(255, 255, 255)',
-                backgroundColor: ['#36a2eb', '#ff6384'],
-                data: [30, 10, 5, 2]
-            }]
-        },
-        options: barChartConfigOptions
-    });
-
+    //effettuo la chiamata Ajax
     let ajaxCall = new AjaxCall();
-    ajaxCall.doCall(ajaxCall.getBaseUri(), ajaxCall.methodGet(), getDatasetForSellersSales);
+    ajaxCall.doCall(ajaxCall.getBaseUri(), ajaxCall.methodGet(), rawData => {
+        printData(rawData)
+    });
 });
 
-function getConfigOptions(showLegend, title, percentageTooltip) {
+function printData(rawData) {
+    const MONTHLY_SALES_CONTEXT = $(".monthly_sales");
+    const SELLER_SALES_CONTEXT = $(".sellers_sales");
+    const QUARTERS_SALES_CONTEXT = $(".quarters_sales");
+    const LINE_CHART_TYPE = "line";
+    const DOUGHNUT_CHART_TYPE = "doughnut";
+    const BAR_CHART_TYPE = "bar";
+    let monthlyData = getDataForMonthlySales(rawData);
+    let sellersData = getDataForSellersSales(rawData);
+    let quartersData = getDataForQuarters(rawData);
+    let monthlyChartOptions = getChartOptions(false, "Fatturato mensile", false, false);
+    let sellerChartOptions = getChartOptions(true, "Fatturato per venditore", true, false);
+    let quarterChartOptions = getChartOptions(false, "Vendite per Quarter", false, true);
+    createChart(MONTHLY_SALES_CONTEXT, LINE_CHART_TYPE, monthlyChartOptions, monthlyData);
+    createChart(SELLER_SALES_CONTEXT, DOUGHNUT_CHART_TYPE, sellerChartOptions, sellersData);
+    createChart(QUARTERS_SALES_CONTEXT, BAR_CHART_TYPE, quarterChartOptions, quartersData);
+}
+
+function createChart(context, chartType, options, data) {
+    let colors = [];
+    let dataset = {};
+    //proprietà specifiche del dataset per tipo di grafico
+    switch (chartType) {
+        case "line":
+            dataset.lineTension = 0;
+            dataset.fill = false;
+            colors = getRandomArrayColors(1);
+            dataset.borderColor = colors[0];
+            break;
+        case "bar":
+        case "doughnut":
+            colors = getRandomArrayColors(data.data.length);
+            dataset.backgroundColor = colors;
+            break;
+        default:
+            throw "Unsupported chart type exception";
+    }
+    //proprietà comune del dataset per tutti i grafici
+    dataset.data = data.data;
+    return new Chart(context, {
+        type: chartType,
+        data: {
+            labels: data.labels,
+            datasets: [dataset]
+        },
+        options: options
+    });
+}
+
+//funzione che ritorna un array di colori random univoci
+function getRandomArrayColors(colorsCount) {
+    let colors = [];
+    while (colors.length < colorsCount) {
+        let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        if (colors.length === 0 || !colors.includes(randomColor)) {
+            colors.push(randomColor);
+        }
+    }
+    return colors;
+}
+
+//funzione che ritorna un oggetto di configurazione per il grafico (proprietà options)
+function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero) {
+    //impostazioni comuni
     let configOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -68,21 +89,32 @@ function getConfigOptions(showLegend, title, percentageTooltip) {
             position: "bottom"
         }
     };
-    //modifico il tooltip mostrando label corrent + valore in percentuale
+    //se richiesto modifico il tooltip mostrando label corrent + valore in percentuale
     if (percentageTooltip) {
-        configOptions.tooltip = {
+        configOptions.tooltips = {
             callbacks: {
                 label: function (tooltipItem, data) {
                     let currentValue = data.datasets[0].data[tooltipItem.index];
-                    let currentLabel = data.labels[tooltipItem.index];
-                    return currentLabel + " | " + parseFloat(Math.round(currentValue * 100)).toFixed(2) + "%";
+                    let currentLabel = " " + data.labels[tooltipItem.index];
+                    return currentLabel + ": " + parseFloat(Math.round(currentValue * 100)).toFixed(2) + "%";
                 }
             }
+        };
+    }
+    //se richiesto forzo valore di partenza asse y a 0
+    if (yAxisBegiAtZero) {
+        configOptions.scales = {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
         };
     }
     return configOptions;
 }
 
+//costruttore oggetto Ajax
 function AjaxCall() {
     //accesso alla variabile e alla costante tramite closure
     //pendingCall mantiene lo stato della chiamata per evitare che venga fatta una nuova chiamata quando un'altra è già in corso
@@ -118,7 +150,7 @@ function AjaxCall() {
     this.methodPost = () => METHOD_POST;
 }
 
-function getDatasetForMonthlySales(rawData) {
+function getDataForMonthlySales(rawData) {
     const MONTHS_IN_A_YEAR = 12;
     let dataset = {
         labels: new Array(MONTHS_IN_A_YEAR),
@@ -136,7 +168,7 @@ function getDatasetForMonthlySales(rawData) {
     return dataset;
 }
 
-function getDatasetForSellersSales(rawData) {
+function getDataForSellersSales(rawData) {
     let totalAmount = 0;
     rawData.forEach((item) => {
         totalAmount += item.amount;
@@ -160,7 +192,7 @@ function getDatasetForSellersSales(rawData) {
     return dataset;
 }
 
-function getDatasetForQuarters(rawData) {
+function getDataForQuarters(rawData) {
     const QUARTERS_IN_A_YEAR = 4;
     let dataset = {
         labels: ["Q1", "Q2", "Q3", "Q4"],
