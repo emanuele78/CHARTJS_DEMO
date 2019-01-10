@@ -11,20 +11,25 @@ $(function () {
         line_chart_type: "line",
         doughnut_chart_type: "doughnut",
         bar_chart_type: "bar",
+        stacked_bar_chart_type: "stacked_bar",
         hide_legend: false,
         show_legend: true,
         y_axis_begin_at_zero: true,
         y_axis_standard: false,
         tooltips_standard: false,
         tooltips_percentage: true,
+        use_stack: true,
+        no_stack: false,
         monthly_chart_title: "Fatturato mensile",
         sellers_chart_title: "Fatturato per venditore",
-        quarters_chart_title: "Vendite per Quarter"
+        quarters_chart_title: "Vendite per Quarter",
+        monthly_sales_per_seller_chart_title: "Vendite mensili per venditore"
     };
     //context per le chart
     this.monthly_sales_context = $(".monthly_sales");
     this.seller_sales_context = $(".sellers_sales");
     this.quarters_sales_context = $(".quarters_sales");
+    this.monthly_sales_per_sellers_context = $(".monthly_sales_per_sellers");
     //oggetto che fa le chiamate Ajax
     this.ajaxCall = new AjaxCall();
     let outerThis = this;
@@ -33,6 +38,58 @@ $(function () {
     });
     //listener per tasti premuti nella input
     attachListenerForOnlyNumbersToInputText($("#value"));
+    // TODO da cancellare
+    // var ctx = $(".monthly_sales_per_sellers");
+    // var myChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["gennaio", "febbraio", "marzo", "aprile"],
+    //         datasets: [{
+    //             label: 'mario',
+    //             data: [12, 19, 3, 5],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.3)',
+    //                 'rgba(54, 162, 235, 0.3)',
+    //                 'rgba(255, 206, 86, 0.3)',
+    //                 'rgba(75, 192, 192, 0.3)'
+    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
+    //             ]
+    //         }, {
+    //             label: 'franco',
+    //             data: [19, 3, 31, 15],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.3)',
+    //                 'rgba(54, 162, 235, 0.3)',
+    //                 'rgba(255, 206, 86, 0.3)',
+    //                 'rgba(75, 192, 192, 0.3)'
+    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
+    //             ]
+    //         }, {
+    //             label: 'miriam',
+    //             data: [7, 13, 4, 9],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.3)',
+    //                 'rgba(54, 162, 235, 0.3)',
+    //                 'rgba(255, 206, 86, 0.3)',
+    //                 'rgba(75, 192, 192, 0.3)'
+    //                 // "#4286f477","#439e4677","#a5179e77","#a58d1777"
+    //             ]
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             xAxes: [{
+    //                 stacked: true
+    //             }],
+    //             yAxes: [{
+    //                 ticks: {
+    //                     beginAtZero: true
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
+
 });
 
 //funzione che collega un listener nella input text passata per abilitare la pressione di soli numeri, 1 punto e tasti cancella
@@ -74,16 +131,19 @@ function printData(rawData) {
     let monthlyData = getDataForMonthlySales(rawData);
     let sellersData = getDataForSellersSales(rawData);
     let quartersData = getDataForQuarters(rawData);
+    let monthlySalesPerSellerData = getDataForMonthlySalesPerSeller(rawData);
     //aggiungo i venditori alla select
     addSellersToSelect(sellersData.labels);
     //creo l'oggetto options per i grafici
-    let monthlyChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.monthly_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_standard);
-    let sellersChartOptions = getChartOptions(this.leterals.show_legend, this.leterals.sellers_chart_title, this.leterals.tooltips_percentage, this.leterals.y_axis_standard);
-    let quartersChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.quarters_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_begin_at_zero);
+    let monthlyChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.monthly_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_standard, this.leterals.no_stack);
+    let sellersChartOptions = getChartOptions(this.leterals.show_legend, this.leterals.sellers_chart_title, this.leterals.tooltips_percentage, this.leterals.y_axis_standard, this.leterals.no_stack);
+    let quartersChartOptions = getChartOptions(this.leterals.hide_legend, this.leterals.quarters_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_begin_at_zero, this.leterals.no_stack);
+    let monthlySalesPerSellerChartOptions = getChartOptions(this.leterals.show_legend, this.leterals.monthly_sales_per_seller_chart_title, this.leterals.tooltips_standard, this.leterals.y_axis_standard, this.leterals.use_stack);
     //creo i grafici
     this.monthlyChart = createChart(this.monthly_sales_context, this.leterals.line_chart_type, monthlyChartOptions, monthlyData);
     this.sellersChart = createChart(this.seller_sales_context, this.leterals.doughnut_chart_type, sellersChartOptions, sellersData);
     this.quartersChart = createChart(this.quarters_sales_context, this.leterals.bar_chart_type, quartersChartOptions, quartersData);
+    this.montlySalesPerSellerChart = createChart(this.monthly_sales_per_sellers_context, this.leterals.stacked_bar_chart_type, monthlySalesPerSellerChartOptions, monthlySalesPerSellerData);
     //listener pulsante per il cambio colore
     attachChangeColorsButtonListener.call(this);
     //listener pulsante aggiunta valori
@@ -183,23 +243,29 @@ function createChart(context, chartType, options, data) {
             dataset.fill = false;
             // nel caso di line posso solo specificare un colore del border color che sarà quindi il primo elemento dell'array colors
             dataset.borderColor = getRandomArrayColors(1)[0];
+            dataset.data = data.data;
+            dataset = [dataset];
             break;
         case "bar":
         case "doughnut":
             //nel caso di bar e pie specifico i colori di background che saranno tanti quanti i dati da visualizzare
             colors = getRandomArrayColors(data.data.length);
             dataset.backgroundColor = colors;
+            dataset.data = data.data;
+            dataset = [dataset];
+            break;
+        case "stacked_bar":
+            chartType = "bar";
+            dataset = data;
             break;
         default:
             throw "Unsupported chart type exception";
     }
-    //proprietà comune del dataset per tutti i grafici
-    dataset.data = data.data;
     return new Chart(context, {
         type: chartType,
         data: {
             labels: data.labels,
-            datasets: [dataset]
+            datasets: dataset
         },
         options: options
     });
@@ -218,7 +284,7 @@ function getRandomArrayColors(colorsCount) {
 }
 
 //funzione che ritorna un oggetto di configurazione per il grafico (proprietà options)
-function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero) {
+function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero, useStack) {
     //impostazioni comuni
     let configOptions = {
         responsive: true,
@@ -253,6 +319,19 @@ function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero) 
                     beginAtZero: true
                 }
             }]
+        };
+    }
+    //se richiesto effettuo lo stack dei valori - provoca in automatico il valore di partenza in y uguale a 0
+    if (useStack) {
+        configOptions.scales = {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }],
+            xAxes: [{
+                stacked: true
+            }],
         };
     }
     return configOptions;
@@ -294,6 +373,7 @@ function AjaxCall() {
     this.methodPost = () => METHOD_POST;
 }
 
+// funzione che ritorna un oggetto contenente le etichette e i valori da impostare nel grafico del fatturato mensile
 function getDataForMonthlySales(rawData) {
     const MONTHS_IN_A_YEAR = 12;
     let dataset = {
@@ -312,6 +392,7 @@ function getDataForMonthlySales(rawData) {
     return dataset;
 }
 
+// funzione che ritorna un oggetto contenente le etichette e i valori da impostare nel grafico della percentuale di fatturato per venditore
 function getDataForSellersSales(rawData) {
     let totalAmount = 0;
     let dataset = {
@@ -334,6 +415,7 @@ function getDataForSellersSales(rawData) {
     return dataset;
 }
 
+// funzione che ritorna un oggetto contenente le etichette e i valori da impostare nel grafico del fatturato per trimestre
 function getDataForQuarters(rawData) {
     const QUARTERS_IN_A_YEAR = 4;
     let dataset = {
@@ -350,6 +432,47 @@ function getDataForQuarters(rawData) {
             dataset.data[QUARTER_INDEX] = 0;
         }
         dataset.data[QUARTER_INDEX]++;
+    });
+    return dataset;
+}
+
+// funzione che ritorna un oggetto contenente le etichette e i valori da impostare nel grafico del fatturato mensile per venditore
+function getDataForMonthlySalesPerSeller(rawData) {
+    //ogni oggetto dell'array sarà un oggetto venditore avente come proprietà
+    //label:nome venditore
+    //data:array di lunghezza fissa(12) inizializzato a 0 contenente le vendite del venditore per ogni mese
+    //backgroundColor: array con i colori usati per lo sfondo delle stacked bar
+    //inoltre nell'array viene impostata una proprietà labels: array con i nomi dei mesi
+    let dataset = [];
+    const MONTHS_NAMES = [];
+    const MONTHS_IN_A_YEAR = 12;
+    for (let cont = 1; cont <= MONTHS_IN_A_YEAR; cont++) {
+        MONTHS_NAMES.push(moment(cont, "M").format("MMMM"));
+    }
+    //proprietà dell'array che contiene un array con il nome dei mesi
+    dataset.labels = MONTHS_NAMES;
+    let colors = getRandomArrayColors(MONTHS_IN_A_YEAR);
+    //ciclo sugli elementi
+    rawData.forEach(item => {
+        //verifico se il venditore è già nel dataset
+        let sellerIndex = -1;
+        for (let cont = 0; cont < dataset.length; cont++) {
+            if (dataset[cont].label === item.salesman) {
+                sellerIndex = cont;
+            }
+        }
+        if (sellerIndex === -1) {
+            //il venditore non esiste, lo aggiungo come oggetto nel dataset
+            dataset.push({
+                label: item.salesman.capitalizeFirst(),
+                data: new Array(MONTHS_IN_A_YEAR).fill(0),
+                backgroundColor: colors
+            });
+        } else {
+            // il venditore esiste già nel dataset
+            const MONTH_INDEX = parseInt(moment(item.date, "DD/MM/YYYY").format("M")) - 1;
+            dataset[sellerIndex].data[MONTH_INDEX] += parseFloat(item.amount);
+        }
     });
     return dataset;
 }
