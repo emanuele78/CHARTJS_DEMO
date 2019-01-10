@@ -3,10 +3,9 @@
 	<head>
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0" name="viewport">
-		<!-- bootstrap here -->
-		<!-- font awesome here -->
-		<!-- custom classes here -->
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,900" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment-with-locales.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -15,17 +14,51 @@
 	</head>
 	<body>
 		<div class="main_wrapper">
-			<div class="chart_container">
-				<canvas class="monthly_sales"></canvas>
+			<div class="data_input">
+				<div class="data_input_left">
+					<label class="label" for="sellers">Venditore</label>
+					<select id="sellers"></select>
+					<label class="label" for="months">Mese</label>
+					<select id="months" name="">
+						<option value="0">Gennaio</option>
+						<option value="1">Febbraio</option>
+						<option value="2">Marzo</option>
+						<option value="3">Aprile</option>
+						<option value="4">Maggio</option>
+						<option value="5">Giugno</option>
+						<option value="6">Luglio</option>
+						<option value="7">Agosto</option>
+						<option value="8">Settembre</option>
+						<option value="9">Ottobre</option>
+						<option value="10">Novembre</option>
+						<option value="11">Dicembre</option>
+					</select>
+					<label class="label" for="value">Importo vendita</label>
+					<input id="value" type="text">
+					<button class="button button_add">Aggiungi</button>
+				</div>
+				<div class="data_input_right">
+					<button class="button button_change_colors">Cambia colori</button>
+				</div>
 			</div>
-			<div class="chart_container">
-				<canvas class="sellers_sales"></canvas>
+			<div class="charts_wrapper">
+				<div class="chart_container">
+					<canvas class="monthly_sales"></canvas>
+				</div>
+				<div class="chart_container">
+					<canvas class="sellers_sales"></canvas>
+				</div>
+				<div class="chart_container">
+				</div>
+				<div class="chart_container">
+					<canvas class="quarters_sales"></canvas>
+				</div>
 			</div>
-			<div class="chart_container">
-			</div>
-			<div class="chart_container">
-				<canvas class="quarters_sales"></canvas>
-			</div>
+			<script id="select_template" type="text/x-handlebars-template">
+				{{#each list}}
+				<option value="{{this}}">{{this}}</option>
+				{{/each}}
+			</script>
 		</div>
 	</body>
 </html>

@@ -1,14 +1,15 @@
+//impostazione locale per momentJS
+moment.locale('it');
+//metodo prototype di utilità
+String.prototype.capitalizeFirst = function () {
+    return this.charAt(0).toUpperCase() + this.substring(1);
+};
+
 $(function () {
-    //impostazione locale per momentJS
-    moment.locale('it');
-    //metodo prototype di utilità
-    String.prototype.capitalizeFirst = function () {
-        return this.charAt(0).toUpperCase() + this.substring(1);
-    };
     //effettuo la chiamata Ajax
     let ajaxCall = new AjaxCall();
     ajaxCall.doCall(ajaxCall.getBaseUri(), ajaxCall.methodGet(), rawData => {
-        printData(rawData)
+        printData(rawData, ajaxCall)
     });
 });
 
@@ -22,14 +23,52 @@ function printData(rawData) {
     let monthlyData = getDataForMonthlySales(rawData);
     let sellersData = getDataForSellersSales(rawData);
     let quartersData = getDataForQuarters(rawData);
+    addSellersToSelect(sellersData.labels);
     let monthlyChartOptions = getChartOptions(false, "Fatturato mensile", false, false);
-    let sellerChartOptions = getChartOptions(true, "Fatturato per venditore", true, false);
-    let quarterChartOptions = getChartOptions(false, "Vendite per Quarter", false, true);
-    createChart(MONTHLY_SALES_CONTEXT, LINE_CHART_TYPE, monthlyChartOptions, monthlyData);
-    createChart(SELLER_SALES_CONTEXT, DOUGHNUT_CHART_TYPE, sellerChartOptions, sellersData);
-    createChart(QUARTERS_SALES_CONTEXT, BAR_CHART_TYPE, quarterChartOptions, quartersData);
+    let sellersChartOptions = getChartOptions(true, "Fatturato per venditore", true, false);
+    let quartersChartOptions = getChartOptions(false, "Vendite per Quarter", false, true);
+    let monthlyChart = createChart(MONTHLY_SALES_CONTEXT, LINE_CHART_TYPE, monthlyChartOptions, monthlyData);
+    let sellersChart = createChart(SELLER_SALES_CONTEXT, DOUGHNUT_CHART_TYPE, sellersChartOptions, sellersData);
+    let quartersChart = createChart(QUARTERS_SALES_CONTEXT, BAR_CHART_TYPE, quartersChartOptions, quartersData);
+    setTimeout(function () {
+        monthlyChart.data.datasets[0].data = ["10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10", "10"];
+        monthlyChart.update();
+    }, 2000);
+    //listener pulsanti
+    $(".button_change_colors").click(function () {
+        changeColors(monthlyChart, sellersChart, quartersChart);
+    });
 }
 
+//funzione che cambia i colori usati nei grafici
+function changeColors(...charts) {
+    //per ogni
+    charts.forEach(chart => {
+        if (chart.config.type === "line") {
+            chart.data.datasets[0].borderColor = getRandomArrayColors(1)[0];
+        } else {
+            chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length);
+        }
+        chart.update();
+    });
+}
+
+//funziona che popola la select dei venditori
+function addSellersToSelect(sellers) {
+    //creo nuovo array in quanto andrò a ordinare la lista alfabeticamente
+    sellers = sellers.slice(0);
+    sellers.sort();
+    $("#sellers").html(getHtmlFromHandlebars(sellers));
+}
+
+// funzione di utilità per handlebars
+function getHtmlFromHandlebars(data) {
+    let source = $("#select_template").html();
+    let template = Handlebars.compile(source);
+    return template({list: data});
+}
+
+//funzione che crea un oggetto grafico e lo ritorna
 function createChart(context, chartType, options, data) {
     let colors = [];
     let dataset = {};
@@ -38,11 +77,12 @@ function createChart(context, chartType, options, data) {
         case "line":
             dataset.lineTension = 0;
             dataset.fill = false;
-            colors = getRandomArrayColors(1);
-            dataset.borderColor = colors[0];
+            // nel caso di line posso solo specificare un colore del border color che sarà quindi il primo elemento dell'array colors
+            dataset.borderColor = getRandomArrayColors(1)[0];
             break;
         case "bar":
         case "doughnut":
+            //nel caso di bar e pie specifico i colori di background che saranno tanti quanti i dati da visualizzare
             colors = getRandomArrayColors(data.data.length);
             dataset.backgroundColor = colors;
             break;
@@ -180,7 +220,7 @@ function getDataForSellersSales(rawData) {
     rawData.forEach((item) => {
         let salesmanIndex = dataset.labels.indexOf(item.salesman);
         if (salesmanIndex === -1) {
-            dataset.labels.push(item.salesman);
+            dataset.labels.push(item.salesman.capitalizeFirst());
             dataset.data.push(item.amount);
         } else {
             dataset.data[salesmanIndex] += item.amount;

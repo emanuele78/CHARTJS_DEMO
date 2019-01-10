@@ -1,4 +1,5 @@
 * {
+	font-family: 'Roboto', sans-serif;
 	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
@@ -9,10 +10,68 @@
 	height: 100vh;
 }
 
+.data_input {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 50px;
+	box-shadow: 0 2px 28px 0 rgba(0, 0, 0, 0.24);
+}
+
+.charts_wrapper {
+	width: 100%;
+	height: 100%;
+	padding-top: 50px;
+}
+
 .chart_container {
 	width: 50%;
 	height: 50%;
 	float: left;
 	padding: 20px;
-	border: 1px solid black;
+	border: 1px solid lightgray;
 }
+
+.data_input_left, .data_input_right {
+	padding: 0 20px;
+}
+
+.label {
+	font-size: 14px;
+	font-weight: 300;
+	padding-right: 5px;
+}
+
+#value {
+	padding: 0 5px;
+	border: 1px solid lightgray;
+}
+
+.button {
+	font-size: 13px;
+	font-weight: 300;
+	padding: 5px 10px;
+	cursor: pointer;
+	text-transform: uppercase;
+	border: none;
+	background-color: lightblue;
+}
+
+#sellers, #months, #value {
+	outline: none;
+}
+
+#sellers, #months, #value {
+	margin-right: 20px;
+}
+
+#sellers, #months {
+	width: 120px;
+}
+
+
+
