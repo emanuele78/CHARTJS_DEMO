@@ -309,9 +309,6 @@ function getDataForMonthlySales(rawData) {
 
 function getDataForSellersSales(rawData) {
     let totalAmount = 0;
-    rawData.forEach((item) => {
-        totalAmount += parseFloat(item.amount);
-    });
     let dataset = {
         labels: [],
         data: []
@@ -324,6 +321,7 @@ function getDataForSellersSales(rawData) {
         } else {
             dataset.data[salesmanIndex] += parseFloat(item.amount);
         }
+        totalAmount += parseFloat(item.amount);
     });
     for (let cont = 0; cont < dataset.data.length; cont++) {
         dataset.data[cont] = dataset.data[cont] / totalAmount;
