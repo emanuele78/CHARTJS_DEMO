@@ -209,9 +209,9 @@ function changeColors(...charts) {
     //per ogni grafico passato cambio il colore
     charts.forEach(chart => {
         if (chart.config.type === "line") {
-            chart.data.datasets[0].borderColor = getRandomArrayColors(1)[0];
+            chart.data.datasets[0].borderColor = getRandomArrayColors(1, false)[0];
         } else {
-            chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length);
+            chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length, true);
         }
         chart.update();
     });
@@ -242,14 +242,14 @@ function createChart(context, chartType, options, data) {
             dataset.lineTension = 0;
             dataset.fill = false;
             // nel caso di line posso solo specificare un colore del border color che sarà quindi il primo elemento dell'array colors
-            dataset.borderColor = getRandomArrayColors(1)[0];
+            dataset.borderColor = getRandomArrayColors(1, false)[0];
             dataset.data = data.data;
             dataset = [dataset];
             break;
         case "bar":
         case "doughnut":
             //nel caso di bar e pie specifico i colori di background che saranno tanti quanti i dati da visualizzare
-            colors = getRandomArrayColors(data.data.length);
+            colors = getRandomArrayColors(data.data.length,false);
             dataset.backgroundColor = colors;
             dataset.data = data.data;
             dataset = [dataset];
@@ -272,16 +272,32 @@ function createChart(context, chartType, options, data) {
 }
 
 //funzione che ritorna un array di colori random univoci
-function getRandomArrayColors(colorsCount) {
+function getRandomArrayColors(colorsCount, useAlpha) {
     let colors = [];
+    let o = Math.round, r = Math.random, s = 255;
     while (colors.length < colorsCount) {
-        let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-        if ((colors.length === 0 || !colors.includes(randomColor)) && randomColor.length === 7) {
+        let randomColor = "";
+        if (useAlpha) {
+            randomColor = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 0.3 + ')';
+        } else {
+            randomColor = 'rgba(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ',' + 1 + ')';
+        }
+        if (colors.length === 0 || !colors.includes(randomColor)) {
             colors.push(randomColor);
         }
     }
     return colors;
 }
+// function getRandomArrayColors(colorsCount) {
+//     let colors = [];
+//     while (colors.length < colorsCount) {
+//         let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+//         if ((colors.length === 0 || !colors.includes(randomColor)) && randomColor.length === 7) {
+//             colors.push(randomColor);
+//         }
+//     }
+//     return colors;
+// }
 
 //funzione che ritorna un oggetto di configurazione per il grafico (proprietà options)
 function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero, useStack) {
@@ -451,7 +467,7 @@ function getDataForMonthlySalesPerSeller(rawData) {
     }
     //proprietà dell'array che contiene un array con il nome dei mesi
     dataset.labels = MONTHS_NAMES;
-    let colors = getRandomArrayColors(MONTHS_IN_A_YEAR);
+    let colors = getRandomArrayColors(MONTHS_IN_A_YEAR, true);
     //ciclo sugli elementi
     rawData.forEach(item => {
         //verifico se il venditore è già nel dataset
