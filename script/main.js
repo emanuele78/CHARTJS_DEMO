@@ -317,7 +317,13 @@ function updateDataset() {
         outerThis.monthlyChart.data.datasets[0].data = monthlyData.data;
         outerThis.sellersChart.data.datasets[0].data = sellersData.data;
         outerThis.quartersChart.data.datasets[0].data = quartersData.data;
-        outerThis.montlySalesPerSellerChart.data.datasets = monthlySalesPerSellerData;
+        outerThis.montlySalesPerSellerChart.data.datasets.forEach(chartItem => {
+            monthlySalesPerSellerData.forEach(newDatasetItem => {
+               if(chartItem.label === newDatasetItem.label){
+                   chartItem.data = newDatasetItem.data;
+               }
+            });
+        });
         outerThis.monthlyChart.update();
         outerThis.sellersChart.update();
         outerThis.quartersChart.update();
@@ -378,6 +384,16 @@ function createChart(context, chartType, options, data) {
         case "stacked_bar":
             chartType = "bar";
             dataset = data;
+            console.log(dataset);
+            //ogni venditore deve avere un colore e questo colore deve essere ripetutto tante volte quanti sono i valore in x
+            let sellerColors = getRandomArrayColors(dataset.length, true);
+            //ciclo sugli elementi venditore nell'array per impostare il colore del bordo - per tutti uguale
+            //e il colore di sfondo ovvero il colore venditore
+            for (let cont = 0; cont < dataset.length; cont++) {
+                dataset[cont].borderWidth = 1;
+                dataset[cont].borderColor = new Array(dataset[cont].data.length).fill("rgba(0, 0, 0, 1)");
+                dataset[cont].backgroundColor = new Array(dataset[cont].data.length).fill(sellerColors[cont]);
+            }
             break;
         default:
             throw "Unsupported chart type exception";
@@ -582,7 +598,6 @@ function getDataForMonthlySalesPerSeller(rawData) {
     }
     //proprietà dell'array che contiene un array con il nome dei mesi
     dataset.labels = MONTHS_NAMES;
-    let usedColors = [];
     //ciclo sugli elementi
     rawData.forEach(item => {
         //verifico se il venditore è già nel dataset
@@ -596,27 +611,8 @@ function getDataForMonthlySalesPerSeller(rawData) {
             //il venditore non esiste, lo aggiungo come oggetto nel dataset
             let newSeller = {
                 label: item.salesman.capitalizeFirst(),
-                data: new Array(MONTHS_IN_A_YEAR).fill(0),
-                backgroundColor: [],
-                borderWidth: 1,
-                borderColor: []
+                data: new Array(MONTHS_IN_A_YEAR).fill(0)
             };
-            //acquisisco colore random per il nuovo venditore
-            let newSellerColor;
-            let generateAgain = true;
-            // genero un nuovo colore finché non ne viene trovato uno che non è già stato usato
-            while (generateAgain) {
-                newSellerColor = getRandomArrayColors(1, true);
-                if (!usedColors.includes(newSellerColor[0])) {
-                    generateAgain = false;
-                    usedColors.push(newSellerColor[0]);
-                }
-            }
-            //il colore così generato appartiene all'utente e deve essere inserito 12 volte (= numero mesi)
-            for (let cont = 0; cont < MONTHS_IN_A_YEAR; cont++) {
-                newSeller.backgroundColor.push(newSellerColor[0]);
-                newSeller.borderColor.push("rgba(0, 0, 0, 1)");
-            }
             dataset.push(newSeller);
             //l'indice dell'elemento inserito sarà uguale alla lunghezza dell'array-1
             sellerIndex = dataset.length - 1;
