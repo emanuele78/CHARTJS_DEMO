@@ -108,6 +108,8 @@ function attachAddValueButtonListener() {
         //rimuovo eventuali bordi rossi precedenti
         $("#value").removeClass("value--error");
         $("#value").addClass("value--standard");
+        //cancello valore inserito
+        $("#value").val("");
         //preparo oggetto data
         let postData = {
             salesman: $("#sellers").val(),
@@ -122,15 +124,15 @@ function attachAddValueButtonListener() {
 }
 
 function updateDataset() {
-    let outerThis=this;
-    this.ajaxCall.doCall(this.ajaxCall.getBaseUri(), this.ajaxCall.methodGet(), rawData => {
+    let outerThis = this;
+    this.ajaxCall.doCall(outerThis.ajaxCall.getBaseUri(), outerThis.ajaxCall.methodGet(), rawData => {
         // elaboro i dati
         let monthlyData = getDataForMonthlySales(rawData);
         let sellersData = getDataForSellersSales(rawData);
         let quartersData = getDataForQuarters(rawData);
-        outerThis.monthlyChart.data.datasets[0].data = monthlyData;
-        outerThis.sellersChart.data.datasets[0].data = sellersData;
-        outerThis.quartersChart.data.datasets[0].data = quartersData;
+        outerThis.monthlyChart.data.datasets[0].data = monthlyData.data;
+        outerThis.sellersChart.data.datasets[0].data = sellersData.data;
+        outerThis.quartersChart.data.datasets[0].data = quartersData.data;
         outerThis.monthlyChart.update();
         outerThis.sellersChart.update();
         outerThis.quartersChart.update();
@@ -203,7 +205,7 @@ function getRandomArrayColors(colorsCount) {
     let colors = [];
     while (colors.length < colorsCount) {
         let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-        if (colors.length === 0 || !colors.includes(randomColor)) {
+        if ((colors.length === 0 || !colors.includes(randomColor)) && randomColor.length === 7) {
             colors.push(randomColor);
         }
     }
@@ -260,7 +262,6 @@ function AjaxCall() {
     const METHOD_GET = "GET";
     const METHOD_POST = "POST";
     this.doCall = function (url, method, successCallback, errorCallback, data) {
-        console.log(data);
         if (!pendingCall) {
             $.ajax(url, {
                 method: method,
@@ -301,7 +302,7 @@ function getDataForMonthlySales(rawData) {
         if (dataset.data[MONTH_INDEX - 1] === undefined) {
             dataset.data[MONTH_INDEX - 1] = 0;
         }
-        dataset.data[MONTH_INDEX - 1] += item.amount;
+        dataset.data[MONTH_INDEX - 1] += parseFloat(item.amount);
     });
     return dataset;
 }
@@ -309,7 +310,7 @@ function getDataForMonthlySales(rawData) {
 function getDataForSellersSales(rawData) {
     let totalAmount = 0;
     rawData.forEach((item) => {
-        totalAmount += item.amount;
+        totalAmount += parseFloat(item.amount);
     });
     let dataset = {
         labels: [],
@@ -319,9 +320,9 @@ function getDataForSellersSales(rawData) {
         let salesmanIndex = dataset.labels.indexOf(item.salesman);
         if (salesmanIndex === -1) {
             dataset.labels.push(item.salesman.capitalizeFirst());
-            dataset.data.push(item.amount);
+            dataset.data.push(parseFloat(item.amount));
         } else {
-            dataset.data[salesmanIndex] += item.amount;
+            dataset.data[salesmanIndex] += parseFloat(item.amount);
         }
     });
     for (let cont = 0; cont < dataset.data.length; cont++) {
