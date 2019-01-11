@@ -70,7 +70,6 @@
 	cursor: pointer;
 	text-transform: uppercase;
 	border: none;
-	/*background-color: lightgreen;*/
 	background-color: rgba(127,255,0, .7);
 	transition: .3s ease;
 }

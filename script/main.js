@@ -94,15 +94,26 @@ function printData(rawData) {
     this.montlySalesPerSellerChart = createChart(this.monthly_sales_per_sellers_context, this.leterals.stacked_bar_chart_type, monthlySalesPerSellerChartOptions, monthlySalesPerSellerData);
     //listener pulsante per il cambio colore
     attachChangeColorsButtonListener.call(this);
+    //listener pulsante per cambio opacità colori
+    attachChangeColorsOpacityButtonListener.call(this);
     //listener pulsante aggiunta valori
     attachAddValueButtonListener.call(this);
+}
+
+//funzione che collega listener su input range che collega opacità colori
+function attachChangeColorsOpacityButtonListener() {
+    let outerThis = this;
+    $("#alpha_slider").on("change", function () {
+        let opacity = $(this).val();
+        updateColorsOpacity(opacity, outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart, outerThis.montlySalesPerSellerChart);
+    });
 }
 
 // funzione che collega listener su pulsante che cambia i colori e processa l'elaborazione
 function attachChangeColorsButtonListener() {
     let outerThis = this;
     $(".button_change_colors").click(function () {
-        changeColors(outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart, outerThis.montlySalesPerSellerChart);
+        updateColors(outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart, outerThis.montlySalesPerSellerChart);
     });
 }
 
@@ -163,28 +174,57 @@ function updateDataset() {
 }
 
 //funzione che cambia i colori usati nei grafici
-function changeColors(...charts) {
+function updateColors(...charts) {
+    //acquisisco valore alpha dallo slider
+    let opacity = $("#alpha_slider").val();
     //per ogni grafico passato cambio il colore
     charts.forEach(chart => {
         if (chart.config.type === "line") {
             //grafico a linea
-            chart.data.datasets[0].borderColor = getRandomArrayColors(1, false)[0];
+            chart.data.datasets[0].borderColor = getRandomArrayColors(1, opacity);
         } else if (chart.data.datasets.length === 1) {
             //grafico a barre o a torta
-            chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length, true);
+            chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length, opacity);
         } else {
             //grafico a barre sovrapposte
-            let sellerColors = getRandomArrayColors(chart.data.datasets.length, true);
+            let sellerColors = getRandomArrayColors(chart.data.datasets.length, opacity);
             //ciclo sugli elementi venditore nell'array per impostare il colore del bordo - per tutti uguale
             //e il colore di sfondo ovvero il colore venditore
             for (let cont = 0; cont < chart.data.datasets.length; cont++) {
-                chart.data.datasets[cont].borderWidth = 1;
-                chart.data.datasets[cont].borderColor = new Array(chart.data.labels.length).fill("rgba(0, 0, 0, 1)");
+                chart.data.datasets[cont].borderColor = new Array(chart.data.labels.length).fill("rgba(0, 0, 0, " + opacity + ")");
                 chart.data.datasets[cont].backgroundColor = new Array(chart.data.labels.length).fill(sellerColors[cont]);
             }
         }
         chart.update();
     });
+}
+
+//funzione che cambia l'opacità dei colori usata nei grafici
+function updateColorsOpacity(opacity, ...charts) {
+    // il valore dell'opacità passato è nel range 1..10, devo portarla in decimale
+    opacity /= 10;
+    charts.forEach(chart => {
+        chart.data.datasets.forEach(datasetItem => {
+            if (datasetItem.borderColor !== undefined) {
+                chageOpacityInRgbaString(opacity, datasetItem.borderColor);
+            }
+            if (datasetItem.backgroundColor !== undefined) {
+                chageOpacityInRgbaString(opacity, datasetItem.backgroundColor);
+            }
+        });
+        chart.update();
+    });
+}
+
+// funzione che modifica il valore dell'opacity in tutte le stringhe rgba contenute nell'array colors
+// la stringa è di tipo rgba(x,x,x,x)
+function chageOpacityInRgbaString(opacity, colors) {
+    for (let cont = 0; cont < colors.length; cont++) {
+        let rgbaString = colors[cont];
+        let rgbaSplitted = rgbaString.split(",");
+        rgbaSplitted[rgbaSplitted.length - 1] = " " + opacity + ")";
+        colors[cont] = rgbaSplitted.join(",");
+    }
 }
 
 //funziona che popola la select dei venditori
@@ -206,20 +246,21 @@ function getHtmlFromHandlebars(data) {
 function createChart(context, chartType, options, data) {
     let colors = [];
     let dataset = {};
+    let opacity = $("#alpha_slider").val();
     //proprietà specifiche del dataset per tipo di grafico
     switch (chartType) {
         case "line":
             dataset.lineTension = 0;
             dataset.fill = false;
             // nel caso di line posso solo specificare un colore del border color che sarà quindi il primo elemento dell'array colors
-            dataset.borderColor = getRandomArrayColors(1, false)[0];
+            dataset.borderColor = getRandomArrayColors(1, opacity);
             dataset.data = data.data;
             dataset = [dataset];
             break;
         case "bar":
         case "doughnut":
             //nel caso di bar e pie specifico i colori di background che saranno tanti quanti i dati da visualizzare
-            colors = getRandomArrayColors(data.data.length, false);
+            colors = getRandomArrayColors(data.data.length, opacity);
             dataset.backgroundColor = colors;
             dataset.data = data.data;
             dataset = [dataset];
@@ -228,12 +269,12 @@ function createChart(context, chartType, options, data) {
             chartType = "bar";
             dataset = data;
             //ogni venditore deve avere un colore e questo colore deve essere ripetutto tante volte quanti sono i valore in x
-            let sellerColors = getRandomArrayColors(dataset.length, true);
+            let sellerColors = getRandomArrayColors(dataset.length, opacity);
             //ciclo sugli elementi venditore nell'array per impostare il colore del bordo - per tutti uguale
             //e il colore di sfondo ovvero il colore venditore
             for (let cont = 0; cont < dataset.length; cont++) {
                 dataset[cont].borderWidth = 1;
-                dataset[cont].borderColor = new Array(dataset[cont].data.length).fill("rgba(0, 0, 0, 1)");
+                dataset[cont].borderColor = new Array(dataset[cont].data.length).fill("rgba(0, 0, 0, " + opacity + ")");
                 dataset[cont].backgroundColor = new Array(dataset[cont].data.length).fill(sellerColors[cont]);
             }
             break;
@@ -251,16 +292,13 @@ function createChart(context, chartType, options, data) {
 }
 
 //funzione che ritorna un array di colori random univoci
-function getRandomArrayColors(colorsCount, useAlpha) {
+function getRandomArrayColors(colorsCount, opacity) {
+    // il valore di opacità è passato nel range 1..10
+    opacity /= 10;
     let colors = [];
     let o = Math.round, r = Math.random, s = 255;
     while (colors.length < colorsCount) {
-        let randomColor = "";
-        if (useAlpha) {
-            randomColor = 'rgba(' + o(r() * s) + ', ' + o(r() * s) + ', ' + o(r() * s) + ', ' + 0.3 + ')';
-        } else {
-            randomColor = 'rgba(' + o(r() * s) + ', ' + o(r() * s) + ', ' + o(r() * s) + ', ' + 1 + ')';
-        }
+        let randomColor = 'rgba(' + o(r() * s) + ', ' + o(r() * s) + ', ' + o(r() * s) + ', ' + opacity + ')';
         if (colors.length === 0 || !colors.includes(randomColor)) {
             colors.push(randomColor);
         }
