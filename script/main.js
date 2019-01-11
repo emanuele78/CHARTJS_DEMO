@@ -103,8 +103,8 @@ function printData(rawData) {
 //funzione che collega listener su input range che collega opacità colori
 function attachChangeColorsOpacityButtonListener() {
     let outerThis = this;
-    $("#alpha_slider").on("change", function () {
-        let opacity = $(this).val();
+    $(".data_input_right").on("input", "#alpha_slider", function () {
+        let opacity = $("#alpha_slider").val();
         updateColorsOpacity(opacity, outerThis.monthlyChart, outerThis.sellersChart, outerThis.quartersChart, outerThis.montlySalesPerSellerChart);
     });
 }
@@ -201,8 +201,8 @@ function updateColors(...charts) {
 
 //funzione che cambia l'opacità dei colori usata nei grafici
 function updateColorsOpacity(opacity, ...charts) {
-    // il valore dell'opacità passato è nel range 1..10, devo portarla in decimale
-    opacity /= 10;
+    // il valore dell'opacità passato è nel range 10..100, devo portarla in decimale
+    opacity /= 100;
     charts.forEach(chart => {
         chart.data.datasets.forEach(datasetItem => {
             if (datasetItem.borderColor !== undefined) {
@@ -293,8 +293,8 @@ function createChart(context, chartType, options, data) {
 
 //funzione che ritorna un array di colori random univoci
 function getRandomArrayColors(colorsCount, opacity) {
-    // il valore di opacità è passato nel range 1..10
-    opacity /= 10;
+    // il valore di opacità è passato nel range 10..100
+    opacity /= 100;
     let colors = [];
     let o = Math.round, r = Math.random, s = 255;
     while (colors.length < colorsCount) {
