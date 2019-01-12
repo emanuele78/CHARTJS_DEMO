@@ -463,7 +463,7 @@ function getDataForQuarters(rawData) {
         //0-base
         let itemMonth = parseInt(moment(item.date, "DD/MM/YYYY").format("M")) - 1;
         //0-base
-        const QUARTER_INDEX = Math.floor((itemMonth + MONTH_IN_A_QUARTER) / 3) - 1;
+        const QUARTER_INDEX = Math.floor(itemMonth / MONTH_IN_A_QUARTER);
         if (dataset.data[QUARTER_INDEX] === undefined) {
             dataset.data[QUARTER_INDEX] = 0;
         }
