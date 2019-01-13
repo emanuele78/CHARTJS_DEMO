@@ -181,7 +181,7 @@ function updateColors(...charts) {
     charts.forEach(chart => {
         if (chart.config.type === "line") {
             //grafico a linea
-            chart.data.datasets[0].borderColor = getRandomArrayColors(1, opacity);
+            chart.data.datasets[0].borderColor = getRandomArrayColors(1, opacity)[0];
         } else if (chart.data.datasets.length === 1) {
             //grafico a barre o a torta
             chart.data.datasets[0].backgroundColor = getRandomArrayColors(chart.data.datasets[0].data.length, opacity);
@@ -206,10 +206,15 @@ function updateColorsOpacity(opacity, ...charts) {
     charts.forEach(chart => {
         chart.data.datasets.forEach(datasetItem => {
             if (datasetItem.borderColor !== undefined) {
-                chageOpacityInRgbaString(opacity, datasetItem.borderColor);
+                if (chart.config.type === "line") {
+                    //il grafico line non supporta array nella proprietà border color
+                    datasetItem.borderColor = changeOpacityInRgbaString(opacity, datasetItem.borderColor);
+                } else {
+                    chageOpacityInColorsArray(opacity, datasetItem.borderColor);
+                }
             }
             if (datasetItem.backgroundColor !== undefined) {
-                chageOpacityInRgbaString(opacity, datasetItem.backgroundColor);
+                chageOpacityInColorsArray(opacity, datasetItem.backgroundColor);
             }
         });
         chart.update();
@@ -218,13 +223,23 @@ function updateColorsOpacity(opacity, ...charts) {
 
 // funzione che modifica il valore dell'opacity in tutte le stringhe rgba contenute nell'array colors
 // la stringa è di tipo rgba(x,x,x,x)
-function chageOpacityInRgbaString(opacity, colors) {
-    for (let cont = 0; cont < colors.length; cont++) {
-        let rgbaString = colors[cont];
-        let rgbaSplitted = rgbaString.split(",");
-        rgbaSplitted[rgbaSplitted.length - 1] = " " + opacity + ")";
-        colors[cont] = rgbaSplitted.join(",");
+function chageOpacityInColorsArray(opacity, object) {
+    if (object instanceof Array) {
+        //array di colori
+        for (let cont = 0; cont < object.length; cont++) {
+            object[cont] = changeOpacityInRgbaString(opacity, object[cont]);
+        }
+    } else {
+        //singola stringa colore
+        changeOpacityInRgbaString(opacity, object);
     }
+}
+
+//funzione che modifica l'opacità in una stringa colore tipo rgba
+function changeOpacityInRgbaString(opacity, color) {
+    let rgbaSplitted = color.split(",");
+    rgbaSplitted[rgbaSplitted.length - 1] = " " + opacity + ")";
+    return rgbaSplitted.join(",");
 }
 
 //funziona che popola la select dei venditori
@@ -253,7 +268,9 @@ function createChart(context, chartType, options, data) {
             dataset.lineTension = 0;
             dataset.fill = false;
             // nel caso di line posso solo specificare un colore del border color che sarà quindi il primo elemento dell'array colors
-            dataset.borderColor = getRandomArrayColors(1, opacity);
+            dataset.borderColor = getRandomArrayColors(1, opacity)[0];
+            let t = getRandomArrayColors(1, opacity);
+            dataset.borderColor = "rgba(255, 99, 132, 0.4)";
             dataset.data = data.data;
             dataset = [dataset];
             break;
@@ -329,7 +346,8 @@ function getChartOptions(showLegend, title, percentageTooltip, yAxisBegiAtZero, 
                 label: function (tooltipItem, data) {
                     let currentValue = data.datasets[0].data[tooltipItem.index];
                     let currentLabel = " " + data.labels[tooltipItem.index];
-                    return currentLabel + ": " + parseFloat(Math.round(currentValue * 100)).toFixed(2) + "%";
+                    console.log(currentValue);
+                    return currentLabel + ": " + parseFloat((currentValue * 100)).toFixed(2) + "%";
                 }
             }
         };
