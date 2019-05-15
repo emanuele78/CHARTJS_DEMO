@@ -3,9 +3,7 @@ Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici 
 
 ## Authors
 
-* **Emanuele Mazzante** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Emanuele Mazzante** - [Full Stack Web Developer](https://emanuelemazzante.dev)
 
 ## License
 
