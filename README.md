@@ -3,7 +3,8 @@ Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici 
 
 ## Autore
 
-* **Emanuele Mazzante** - [Full Stack Web Developer](https://emanuelemazzante.dev) [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
+* **Emanuele Mazzante** - [Full Stack Web Developer](https://emanuelemazzante.dev) 
+[![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
 
 ## Licenza
 
