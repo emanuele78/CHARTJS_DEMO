@@ -5,7 +5,7 @@ Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici 
 
 ## Autore
 
-* **Emanuele Mazzante** - [Full Stack Web Developer](https://emanuelemazzante.dev) 
+* **Emanuele Mazzante** - [emanuelemazzante.dev](https://emanuelemazzante.dev) 
 
 [![Ask Me Anything !](https://img.shields.io/badge/Ask%20me-anything-1abc9c.svg)](https://GitHub.com/Naereen/ama)
 
@@ -13,6 +13,6 @@ Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici 
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-La licenza assegnata al presente progetto è MIT LICENSE - leggere il file [LICENSE.md](LICENSE.md) per maggiori informazioni
+La licenza assegnata al presente progetto è **MIT LICENSE** - leggere il file [LICENSE.md](LICENSE.md) per maggiori informazioni
 
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
