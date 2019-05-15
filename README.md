@@ -1,7 +1,7 @@
 # CHARTJS_DEMO
 Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici costruiti con ChartJs
 
-[![Generic badge](https://img.shields.io/badge/DEMO-LIVE-<COLOR>.svg)](https://emanuelemazzante.dev/)
+[![Generic badge](https://img.shields.io/badge/LIVEDEMO-QUI-<COLOR>.svg)](https://emanuelemazzante.dev/demo/chart/)
 
 ![screen](../master/art/demo_screen.png)
 
