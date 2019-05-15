@@ -17,4 +17,4 @@ Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici 
 
 La licenza assegnata al presente progetto è **MIT LICENSE** - leggere il file [LICENSE.md](LICENSE.md) per maggiori informazioni
 
-[![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://GitHub.com/Naereen/)
+[![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://emanuelemazzante.dev/)
