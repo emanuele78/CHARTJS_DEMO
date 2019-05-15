@@ -1,6 +1,8 @@
 # CHARTJS_DEMO
 Rappresentazione di alcuni dati ottenuti da un'API privata per mezzo di grafici costruiti con ChartJs
 
+![screen](../master/art/demo_screen.png)
+
 ## Autore
 
 * **Emanuele Mazzante** - [Full Stack Web Developer](https://emanuelemazzante.dev) 
