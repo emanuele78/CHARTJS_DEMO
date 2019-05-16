@@ -1,4 +1,4 @@
-# CHARTJS_DEMO
+# CHARTJS DEMO
 Demo di esempio con ChartJs per la rappresentazione di alcuni dati ottenuti da un'API privata.
 
 [![Generic badge](https://img.shields.io/badge/LIVEDEMO-HERE-<COLOR>.svg)](https://emanuelemazzante.dev/demo/chart/)
