@@ -15,6 +15,6 @@ Demo di esempio con ChartJs per la rappresentazione di alcuni dati ottenuti da u
 
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-La licenza assegnata al presente progetto è **MIT LICENSE** - leggere il file [LICENSE.md](LICENSE.md) per maggiori informazioni
+Per maggiori informazioni riguardo la licenza leggere il file [LICENSE.md](LICENSE.md).
 
 [![ForTheBadge built-with-love](http://ForTheBadge.com/images/badges/built-with-love.svg)](https://emanuelemazzante.dev/)
